@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Train 火车票系统架构图</title>
+  <desc id="desc">用户端和管理端通过 Gateway 访问 member、business、batch 微服务，各服务连接数据库及 Nacos、Redis、RocketMQ、Seata 和 Sentinel 等基础设施。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .title { font: 700 28px "Microsoft YaHei", "PingFang SC", sans-serif; fill: #0f172a; }
+      .section { font: 600 15px "Microsoft YaHei", "PingFang SC", sans-serif; fill: #64748b; letter-spacing: 1px; }
+      .node-title { font: 700 18px "Microsoft YaHei", "PingFang SC", sans-serif; fill: #0f172a; }
+      .node-sub { font: 14px "Microsoft YaHei", "PingFang SC", sans-serif; fill: #475569; }
+      .edge-label { font: 13px "Microsoft YaHei", "PingFang SC", sans-serif; fill: #475569; }
+      .edge { fill: none; stroke: #64748b; stroke-width: 2; marker-end: url(#arrow); }
+      .edge-blue { fill: none; stroke: #2563eb; stroke-width: 2.5; marker-end: url(#arrowBlue); }
+      .edge-dashed { fill: none; stroke: #94a3b8; stroke-width: 1.8; stroke-dasharray: 7 6; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1280" height="720" rx="20" fill="#f8fafc"/>
+  <text x="48" y="52" class="title">Train 火车票系统架构</text>
+
+  <text x="58" y="102" class="section">客户端</text>
+  <text x="300" y="102" class="section">统一入口</text>
+  <text x="528" y="102" class="section">微服务</text>
+  <text x="870" y="102" class="section">数据存储</text>
+
+  <!-- Client nodes -->
+  <g filter="url(#shadow)">
+    <rect x="48" y="130" width="180" height="82" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="2"/>
+    <rect x="48" y="246" width="180" height="82" rx="14" fill="#ffffff" stroke="#bfdbfe" stroke-width="2"/>
+  </g>
+  <text x="138" y="164" text-anchor="middle" class="node-title">用户端 Web</text>
+  <text x="138" y="190" text-anchor="middle" class="node-sub">Vue 3 · :9001</text>
+  <text x="138" y="280" text-anchor="middle" class="node-title">管理端 Admin</text>
+  <text x="138" y="306" text-anchor="middle" class="node-sub">Vue 3 · :9000</text>
+
+  <!-- Gateway -->
+  <g filter="url(#shadow)">
+    <rect x="286" y="178" width="186" height="102" rx="16" fill="#dbeafe" stroke="#60a5fa" stroke-width="2"/>
+  </g>
+  <text x="379" y="216" text-anchor="middle" class="node-title">Gateway</text>
+  <text x="379" y="242" text-anchor="middle" class="node-sub">路由 · CORS · JWT</text>
+  <text x="379" y="264" text-anchor="middle" class="node-sub">:8000</text>
+
+  <!-- Service nodes -->
+  <g filter="url(#shadow)">
+    <rect x="526" y="122" width="210" height="82" rx="14" fill="#ffffff" stroke="#86efac" stroke-width="2"/>
+    <rect x="526" y="238" width="210" height="82" rx="14" fill="#ffffff" stroke="#86efac" stroke-width="2"/>
+    <rect x="526" y="354" width="210" height="82" rx="14" fill="#ffffff" stroke="#86efac" stroke-width="2"/>
+  </g>
+  <text x="631" y="156" text-anchor="middle" class="node-title">member</text>
+  <text x="631" y="182" text-anchor="middle" class="node-sub">会员与车票 · :8001</text>
+  <text x="631" y="272" text-anchor="middle" class="node-title">business</text>
+  <text x="631" y="298" text-anchor="middle" class="node-sub">车次与购票 · :8002</text>
+  <text x="631" y="388" text-anchor="middle" class="node-title">batch</text>
+  <text x="631" y="414" text-anchor="middle" class="node-sub">Quartz 任务 · :8003</text>
+
+  <!-- Databases -->
+  <g filter="url(#shadow)">
+    <rect x="862" y="122" width="188" height="82" rx="14" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+    <rect x="862" y="238" width="188" height="82" rx="14" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+    <rect x="862" y="354" width="188" height="82" rx="14" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+  </g>
+  <text x="956" y="156" text-anchor="middle" class="node-title">member DB</text>
+  <text x="956" y="182" text-anchor="middle" class="node-sub">MySQL 8</text>
+  <text x="956" y="272" text-anchor="middle" class="node-title">business DB</text>
+  <text x="956" y="298" text-anchor="middle" class="node-sub">MySQL 8</text>
+  <text x="956" y="388" text-anchor="middle" class="node-title">batch DB</text>
+  <text x="956" y="414" text-anchor="middle" class="node-sub">Quartz QRTZ_*</text>
+
+  <!-- Main request edges -->
+  <path d="M228 171 H258 Q270 171 270 183 V207 Q270 219 286 219" class="edge-blue"/>
+  <path d="M228 287 H258 Q270 287 270 275 V251 Q270 239 286 239" class="edge-blue"/>
+  <path d="M472 229 H492 Q504 229 504 217 V175 Q504 163 526 163" class="edge-blue"/>
+  <path d="M472 229 H504 Q516 229 516 267 Q516 279 526 279" class="edge-blue"/>
+  <path d="M472 229 H492 Q504 229 504 241 V383 Q504 395 526 395" class="edge-blue"/>
+
+  <!-- Service-to-service edges -->
+  <path d="M631 354 V332 Q631 326 631 320" class="edge"/>
+  <text x="644" y="340" class="edge-label">Feign</text>
+  <path d="M736 262 Q790 262 790 216 Q790 163 736 163" class="edge"/>
+  <text x="750" y="238" class="edge-label">Feign</text>
+
+  <!-- Database edges -->
+  <path d="M736 163 H862" class="edge"/>
+  <path d="M736 279 H862" class="edge"/>
+  <path d="M736 395 H862" class="edge"/>
+
+  <!-- Infrastructure section -->
+  <text x="58" y="496" class="section">基础设施</text>
+  <g filter="url(#shadow)">
+    <rect x="48" y="520" width="190" height="92" rx="14" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="2"/>
+    <rect x="274" y="520" width="190" height="92" rx="14" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="2"/>
+    <rect x="500" y="520" width="190" height="92" rx="14" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="2"/>
+    <rect x="726" y="520" width="190" height="92" rx="14" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="2"/>
+    <rect x="952" y="520" width="190" height="92" rx="14" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="2"/>
+  </g>
+  <text x="143" y="557" text-anchor="middle" class="node-title">Nacos</text>
+  <text x="143" y="584" text-anchor="middle" class="node-sub">注册与配置 · :8848</text>
+  <text x="369" y="557" text-anchor="middle" class="node-title">Sentinel</text>
+  <text x="369" y="584" text-anchor="middle" class="node-sub">限流 · :18080</text>
+  <text x="595" y="557" text-anchor="middle" class="node-title">Redis</text>
+  <text x="595" y="584" text-anchor="middle" class="node-sub">缓存 · 令牌 · 分布式锁</text>
+  <text x="821" y="557" text-anchor="middle" class="node-title">RocketMQ</text>
+  <text x="821" y="584" text-anchor="middle" class="node-sub">异步排队 · :9876</text>
+  <text x="1047" y="557" text-anchor="middle" class="node-title">Seata</text>
+  <text x="1047" y="584" text-anchor="middle" class="node-sub">跨服务分布式事务</text>
+
+  <!-- Infrastructure relations -->
+  <path d="M526 150 Q143 150 143 520" class="edge-dashed"/>
+  <path d="M526 276 Q369 276 369 520" class="edge-dashed"/>
+  <path d="M584 320 V520" class="edge-dashed"/>
+  <path d="M678 320 Q821 350 821 520" class="edge-dashed"/>
+  <path d="M704 320 Q1047 360 1047 520" class="edge-dashed"/>
+
+  <text x="48" y="672" class="node-sub">实线：请求、服务调用或数据访问　　虚线：基础设施依赖</text>
+</svg>
